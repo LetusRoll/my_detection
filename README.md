@@ -20,6 +20,6 @@ Ground segmentation , point cloud clustering based on CVC(Curved Voxel Clusterin
 `roslaunch my_detection velodyne_points.launch`
 
 
-![2021-11-02 20-06-18 的屏幕截图](https://user-images.githubusercontent.com/56507063/139843004-ac3e47df-af02-4c80-9968-ce5f72e6edb7.png)
 ![2021-11-02 20-09-33 的屏幕截图](https://user-images.githubusercontent.com/56507063/139843561-a8476c82-d2d6-4ba0-ae2f-7d7072e883cf.png)
-![2021-11-02 20-38-47 的屏幕截图](https://user-images.githubusercontent.com/56507063/139848043-8a087f8a-2a8d-4f21-b0c3-2ea99e7d3c99.png)
+
+![2021-11-02 20-38-47 的屏幕截图](https://user-images.githubusercontent.com/56507063/139848240-388eb313-17ac-4e8b-a8c0-f7002eeb63f5.png)
