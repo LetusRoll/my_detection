@@ -1,5 +1,5 @@
 # my_detection
-Ground segmentation , point cloud clustering based on CVC(Curved Voxel Clustering) and polygonal box
+Ground segmentation , point cloud clustering based on CVC(Curved Voxel Clustering) and polygonal box(classify vehicles simply by length,width and height)
 本项目使用设置地面坡度阈值的方法，滤除地面点，使用三维弯曲体素聚类法完成点云的聚类，包围盒参数由Apollo库的common_lib和object_builders_lib
 得出,代码还有一些中文注释。
 运行步骤：
