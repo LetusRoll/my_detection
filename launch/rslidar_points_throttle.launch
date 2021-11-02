@@ -1,0 +1,56 @@
+<launch>
+  <arg name="min_x" default="-30.0" />
+  <arg name="max_x" default="50.0" />
+  <arg name="min_y" default="-15.0" />
+  <arg name="max_y" default="15.0" />
+  <arg name="min_z" default="-2.2" />
+  <arg name="max_z" default="1.0" />
+  <arg name="min_base_x" default="-2.0" />
+  <arg name="max_base_x" default="2.0" />
+  <arg name="min_base_y" default="-1.0" />
+  <arg name="max_base_y" default="1.0" />
+  <arg name="min_base_z" default="-2.2" />
+  <arg name="max_base_z" default="0.05" />
+  <arg name="leaf_size" default="0.1" />
+  <arg name="delta_radius_" default="0.1" />
+  <arg name="delta_angle_" default="0.18" />
+  <arg name="SENSOR_HEIGHT" default="2.2" />
+  <arg name="min_delta_height_" default="0.05" />
+  <arg name="local_max_slope" default="3.0" />
+  <arg name="global_max_slope" default="2.0" />
+  <arg name="max_delta_radius_" default="0.2" />
+  <arg name="radial_num" default="2000" />
+  <arg name="min_phi" default="-15" />
+  <arg name="max_phi" default="15" />
+  <arg name="delta_theta" default="1.2" />
+  <arg name="delta_rho" default="0.3" />
+  <arg name="delta_phi" default="2" />
+
+  <node pkg="my_detection" type="my_detection" name="my_detection" output="screen">
+    <param name="min_x" value="$(arg min_x)" />
+    <param name="max_x" value="$(arg max_x)" />
+    <param name="min_y" value="$(arg min_y)" />
+    <param name="max_y" value="$(arg max_y)" />
+    <param name="min_z" value="$(arg min_z)" />
+    <param name="max_z" value="$(arg max_z)" />
+    <param name="min_base_x" value="$(arg min_base_x)" />
+    <param name="max_base_x" value="$(arg max_base_x)" />
+    <param name="min_base_y" value="$(arg min_base_y)" />
+    <param name="max_base_y" value="$(arg max_base_y)" />
+    <param name="min_base_z" value="$(arg min_base_z)" />
+    <param name="max_base_z" value="$(arg max_base_z)" />
+    <param name="leaf_size" value="$(arg leaf_size)" />
+    <param name="delta_radius_" value="$(arg delta_radius_)" />
+    <param name="delta_angle_" value="$(arg delta_angle_)" />
+    <param name="SENSOR_HEIGHT" value="$(arg SENSOR_HEIGHT)" />
+    <param name="min_delta_height_" value="$(arg min_delta_height_)" />
+    <param name="local_max_slope" value="$(arg local_max_slope)" />
+    <param name="global_max_slope" value="$(arg global_max_slope)" />
+    <param name="max_delta_radius_" value="$(arg max_delta_radius_)" />
+    <param name="radial_num" value="$(arg radial_num)" />
+    <param name="delta_theta" value="$(arg delta_theta)" />
+    <param name="delta_rho" value="$(arg delta_rho)" />
+    <param name="delta_phi" value="$(arg delta_phi)" />
+  </node>
+
+</launch>
