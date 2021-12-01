@@ -1,0 +1,8 @@
+<launch>
+  <node pkg="my_detection" type="my_detection" name="my_detection" output="screen">
+    <rosparam file="$(find my_detection)/config/rslidar.yaml" command="load"/>
+    <remap from="/rslidar_points_throttle" to="/rslidar_points" />
+  </node>
+  <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find my_detection)/rviz_config/rslidar.rviz" />
+  <node name="playbag" pkg="rosbag" type="play" args="--clock /home/cxy/DataSet/32/32_2.bag" />
+</launch>

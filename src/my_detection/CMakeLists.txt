@@ -18,16 +18,18 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
   common_lib
   object_builders_lib
+  jsk_recognition_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(PCL 1.8 REQUIRED)
 find_package(Eigen3 REQUIRED)
-include_directories(include ${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
+find_package(OpenCV REQUIRED)
+##include_directories(include ${PCL_INCLUDE_DIRS})
+##link_directories(${PCL_LIBRARY_DIRS})
 
-link_directories(/usr/local/lib)
+##link_directories(/usr/local/lib)
 include_directories(/usr/local/include/yaml-cpp)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -150,7 +152,9 @@ include_directories(
 		src/clip/clip.cpp
 		src/remove_ground/remove_ground.cpp
 		src/cluster/CVC.cpp
-		src/main.cpp)
+    ##src/cluster/CVC_cluster.cpp
+		src/perception.cpp
+    src/perception_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -164,7 +168,7 @@ include_directories(
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(my_detection
-   ${EIGEN3_INCLUDE_DIR} ${PCL_LIBRARIES} ${catkin_LIBRARIES}
+   ${EIGEN3_INCLUDE_DIR} ${PCL_LIBRARIES} ${catkin_LIBRARIES} ${OpenCV_LIBS}
  )
 
 #############

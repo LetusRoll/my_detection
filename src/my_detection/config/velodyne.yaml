@@ -1,0 +1,33 @@
+#clip
+min_x: -30.0
+max_x: 50.0
+min_y: -15.0
+max_y: 15.0
+min_z: -1.8
+max_z: 0.1
+min_base_x: -2.5
+max_base_x: 2.5
+min_base_y: -1.0
+max_base_y: 1.0
+min_base_z: -1.8
+max_base_z: 0.05
+#remove_ground
+leaf_size: 0.1
+delta_radius_: 0.2
+delta_angle_: 0.18
+SENSOR_HEIGHT: 1.8
+min_delta_height_: 0.05
+local_max_slope: 8.0
+global_max_slope: 5.0
+max_delta_radius_: 0.2
+radial_num: 2000
+#cvc_cluster
+min_phi: -15
+max_phi: 15
+delta_theta: 1.0
+delta_rho: 0.3
+delta_phi: 1.2
+max_dist_: 1.0
+min_cluster_num_: 10
+#box
+delta_box_length: 4.0

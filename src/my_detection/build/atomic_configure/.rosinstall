@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/cxy/lidar_detection_projects/my_detection/build/devel/setup.sh

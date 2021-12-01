@@ -32,13 +32,30 @@
  * @LastEditTime: 2021-10-12 14:49:36
  */#include"remove_ground.h"
 
- RemoveGround::RemoveGround(const PtC::Ptr &in_cloud,PtC::Ptr &out_cloud)
+RemoveGround::RemoveGround(ros::NodeHandle &nh,ros::NodeHandle &private_nh)
+{
+    private_nh.param<float>("max_radius", max_radius, 0.0);
+    private_nh.param<float>("delta_radius_", delta_radius_, 0.2);
+    private_nh.param<float>("delta_angle_", delta_angle_, 0.18);
+    private_nh.param<float>("SENSOR_HEIGHT", SENSOR_HEIGHT, 2.2);
+    private_nh.param<float>("min_delta_height_", min_delta_height_, 0.05);
+    private_nh.param<float>("local_max_slope", local_max_slope, 8.0);
+    private_nh.param<float>("global_max_slope", global_max_slope, 5.0);
+    private_nh.param<float>("max_delta_radius_", max_delta_radius_, 0.2);
+    private_nh.param<int>("radial_num", radial_num, 2000);
+
+
+}
+
+
+
+ void RemoveGround::Process(const PtC::Ptr &in_cloud,PtC::Ptr &non_ground_cloud,PtC::Ptr &ground_cloud)
  {
     
     vector<vector<AR> > out;//out是个二维列表,数据类型为AR
     XYZI2AR(in_cloud,out);//转换格式
     
-    Segment(out,out_cloud);//分割地面
+    Segment(out,non_ground_cloud,ground_cloud);//分割地面
     
  }
 RemoveGround::~RemoveGround()
@@ -60,6 +77,11 @@ RemoveGround::~RemoveGround()
 
         trans_point.radius=CalculateR(point);//半径
 
+        if(trans_point.radius>max_radius)
+        {
+            max_radius=trans_point.radius;
+        }
+
         trans_point.angle_index=(size_t)floor(trans_point.angle/delta_angle_);//角度序号
 
         trans_point.radius_index=(size_t)floor(trans_point.radius/delta_radius_);//半径序号
@@ -78,8 +100,9 @@ RemoveGround::~RemoveGround()
  }
 
 //划分地面与非地面
-void RemoveGround::Segment(vector<vector<AR> >&out,PtC::Ptr &out_cloud)
+void RemoveGround::Segment(vector<vector<AR> >&out,PtC::Ptr &non_ground_cloud,PtC::Ptr &ground_cloud)
 {
+    //PtC::Ptr unfiltered_non_ground_cloud(new PtC);
     //遍历点云
     for(size_t i=0;i<out.size();++i)//遍历每个角度
     {
@@ -94,15 +117,16 @@ void RemoveGround::Segment(vector<vector<AR> >&out,PtC::Ptr &out_cloud)
             float distance_radius=current_radius-prev_radius;//前后两条射线半径差
             float distance_height=current_height-prev_height;//前后射线
             float distance_height_threshold=distance_radius*tan(DEG2RAD(local_max_slope));//前后点高度差值阈值
-            float height_threshold=current_radius*tan(DEG2RAD(global_max_slope));//当此点处于最大坡度时，距离地面高度阈值
+            //float height_threshold=current_radius*tan(DEG2RAD(global_max_slope));
+            float height_threshold=current_radius*tan(DEG2RAD(global_max_slope))*(1-current_radius/(max_radius+0.1));//当此点处于最大坡度时，距离地面高度阈值
             //当两点距离过小时，设高度距离为min_delta_height_
             if((distance_radius>delta_radius_)&&(distance_height<min_delta_height_))
             {
                 distance_height=min_delta_height_;
             }
-
-            //    |distance_height|<height_threshold
-            if((distance_height<=height_threshold)&&(distance_height>=-height_threshold))
+                
+            //    |distance_height|<distance_height_threshold
+            if((distance_height<=distance_height_threshold)&&(distance_height>=-distance_height_threshold))
             {
                 if (prev_ground)
                 {
@@ -110,7 +134,7 @@ void RemoveGround::Segment(vector<vector<AR> >&out,PtC::Ptr &out_cloud)
                 }
                 else
                 {
-                    //|SENSOR_HEIGHT+current_height|<current_radius*tan(max_slope)
+                    //|SENSOR_HEIGHT+current_height|<current_radius*tan(global_max_slope)
                     if(((SENSOR_HEIGHT+current_height)<=height_threshold)&&((SENSOR_HEIGHT+current_height)>=-height_threshold))
                     {
                         current_ground=true;
@@ -138,12 +162,22 @@ void RemoveGround::Segment(vector<vector<AR> >&out,PtC::Ptr &out_cloud)
             }
             if(!current_ground)//输出非地面点
             {
-                out_cloud->points.push_back(out[i][j].point);
+                non_ground_cloud->points.push_back(out[i][j].point);
+            }
+            else
+            {
+                ground_cloud->points.push_back(out[i][j].point);
             }
             prev_height=current_height;//更新高度，半径
             prev_radius=current_radius;
         }
     }
+    // //去除部分未滤除的点
+    // pcl::StatisticalOutlierRemoval<Pt> sor;
+    // sor.setInputCloud(unfiltered_non_ground_cloud);
+    // sor.setMeanK(50);//20个临近点
+    // sor.setStddevMulThresh(1.2);//距离大于1倍标准方差
 
+    // sor.filter(*non_ground_cloud);
 
 }

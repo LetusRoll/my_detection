@@ -8,7 +8,26 @@
  */
 #include"clip.h"
 
-Clip::Clip(const PtC::Ptr &in_cloud,PtC::Ptr &out_cloud)
+Clip::Clip(ros::NodeHandle &nh,ros::NodeHandle &private_nh)
+{
+    private_nh.param<float>("min_x", min_x, -30.0);
+    private_nh.param<float>("max_x", max_x, 50.0);
+    private_nh.param<float>("min_y", min_y, -15.0);
+    private_nh.param<float>("max_y", max_y, 15.0);
+    private_nh.param<float>("min_z", min_z, -2.2);
+    private_nh.param<float>("max_z", max_z, 1.0);
+    private_nh.param<float>("min_base_x", min_base_x, -2.0);
+    private_nh.param<float>("max_base_x", max_base_x, 2.0);
+    private_nh.param<float>("min_base_y", min_base_y, -1.0);
+    private_nh.param<float>("max_base_y", max_base_y, 1.0);
+    private_nh.param<float>("min_base_z", min_base_z, -2.2);
+    private_nh.param<float>("max_base_z", max_base_z, 0.05);
+
+}
+
+
+
+void Clip::Process(const PtC::Ptr &in_cloud,PtC::Ptr &out_cloud)
 {
     PtC::Ptr filtered_cloud(new PtC);
     
@@ -20,7 +39,10 @@ Clip::Clip(const PtC::Ptr &in_cloud,PtC::Ptr &out_cloud)
         float z=in_cloud->points[i].z;
         if(IsIn(x,min_x,max_x)&&(IsIn(y,min_y,max_y)&&(IsIn(z,min_z,max_z))))
         {
-            filtered_cloud->points.push_back(in_cloud->points[i]);
+	    if(!(IsIn(x,min_base_x,max_base_x)&&IsIn(y,min_base_y,max_base_y)&&IsIn(z,min_base_z,max_base_z)))            
+	    {		
+		filtered_cloud->points.push_back(in_cloud->points[i]);
+	    }
         }
     }
 
