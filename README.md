@@ -4,7 +4,7 @@ Ground segmentation , point cloud clustering based on CVC(Curved Voxel Clusterin
 得出,代码还有一些中文注释。
 运行步骤：
 
-`git clone https://github.com/cxy329/my_detection.git`
+`https://github.com/C-Xingyu/my_detection.git`
 
 `cd my_detection`
 
